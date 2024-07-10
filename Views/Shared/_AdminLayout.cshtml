@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin 2 - Blank</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="~/Admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="~/Admin/css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+         
+
+            <!-- Nav Item - Admin -->
+            <li class="nav-item">
+                <a class="nav-link" href="/Admins/index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Admin</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/Categories/index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Kategori</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/SubCategories/index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>AltKategori</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/Products/index">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Ürünler</span>
+                </a>
+            </li>
+        
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    @RenderBody();
+
+                </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/Admin/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/Admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/Admin/js/sb-admin-2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function () {
+            $("#CategorySelect").change(function () {
+                $("#SubCategorySelect").empty(); // Alt kategori seçim kutusunu temizler. //id oldugu için # işareti koyuyuroz.
+                var deger = $(this).val(); // Seçilen kategori değerini alır
+                $.ajax({
+                    method: 'POST',// POST yöntemiyle istek yapar
+                    url: '/Products/CategoryList',  // İstek yapılacak URL --aynı isimdeki controlle gönderir. o controllede categorylist isimli action oluşturmam
+                    data: { id: deger },// Gönderilecek veri (seçilen kategori ID'si)
+                    dataType: 'json',// Beklenen veri formatı (JSON)
+                    success: function (data) { // İstek başarılı olursa çalışacak fonksiyon
+
+                        $.each(data, function (i, row) {
+                            // Her bir alt kategori için bir option elemanı oluşturur ve ekler
+                            $("#SubCategorySelect").append('<option value='+row.value+'>'+row.text+'</option>')
+                        })
+                    
+                    
+                    },
+                    error: function (data) {// İstek başarısız olursa çalışacak fonksiyon
+                        alert("Hata Oluştu");
+                    }
+                });
+            });
+        });
+        
+    </script>
+
+    @await RenderSectionAsync("Scripts",required:false)
+
+</body>
+
+</html>
